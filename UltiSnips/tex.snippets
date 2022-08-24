@@ -1,3 +1,4 @@
+
 ##########
 # GLOBAL #
 ##########
@@ -29,12 +30,38 @@ def add_row(snip):
 	final_str += " & ".join(['$' + str(j + 1) for j in range(row_len)])
 	final_str += " \\\\\\"
 	snip.expand_anon(final_str)
+
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+
+def comment(): 
+	return vim.eval('vimtex#syntax#in_comment()') == '1'
+
+def env(name):
+	[x,y] = vim.eval("vimtex#env#is_inside('" + name + "')") 
+	return x != '0' and y != '0'
 endglobal
 
 
 ###############
 # ENVIRONMENT #
 ###############
+## Custom
+snippet template "Basic template" b
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+
+\begin{document}
+	$0
+\end{document}
+endsnippet
+
+
 
 snippet beg "begin{} / end{}" bi
 \begin{$1}
@@ -180,6 +207,21 @@ endsnippet
 ########
 # MATH #
 ########
+## Custom for SDI
+snippet lode1 "First order linear ODE" i
+${1:y}'(${2:x}) + p($2)$1($2) = r($2)
+
+context "math()"
+snippet lode2 "Second order linear ODE" i
+${1:y}''(${2:x}) + p($2)$1'($2) + q($2)$1($2) = r($2)
+endsnippet
+
+context "math()"
+snippet lodec2 "Second order linear ODE with constant coeffs" i
+${1:y}''(${2:x}) + a$1'($2) + b$1($2) = r($2)
+endsnippet
+
+## End custom
 
 snippet cc "subset" w
 \subset 
@@ -521,3 +563,5 @@ snippet subpar* "Sub Paragraph*" wi
 endsnippet
 
 # vim:ft=snippets:
+
+ vim:ft=snippets:
